@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import dev.unscrud.api_milhas.domain.promocao.Promocao;
 import dev.unscrud.api_milhas.domain.promocao.PromocaoRepository;
+import dev.unscrud.api_milhas.domain.promocao.PromocaoResponseDTO;
 
 @RestController
 @RequestMapping("/promocao")
@@ -19,7 +19,11 @@ public class PromocaoController {
     private PromocaoRepository promocaoRepository;
 
     @GetMapping
-    public ResponseEntity<List<Promocao>> listarPromocoes(){
-        return ResponseEntity.ok(promocaoRepository.findAll());
+    public ResponseEntity<List<PromocaoResponseDTO>> listarPromocoes(){
+        List<PromocaoResponseDTO> promocoes = promocaoRepository
+                .findAll().stream()
+                .map(PromocaoResponseDTO::new).toList();
+
+        return ResponseEntity.ok(promocoes);
     }
 }
