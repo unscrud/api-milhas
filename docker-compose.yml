@@ -1,0 +1,49 @@
+volumes:
+  postgres-data:
+  maven-cache:
+
+services:
+  app:
+    container_name: javaprod
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in db container
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_USER: postgres
+        POSTGRES_DB: milhas
+        POSTGRES_HOSTNAME: postgresdb
+    ports:
+      - "3000:3000"
+    volumes:
+      - maven-cache:/root/.m2
+    depends_on:
+      - db
+    networks:
+      - app-network
+    # Overrides default command so things don't shut down after the process ends.
+    #command: sleep infinity
+
+    # Runs app on the same network as the database container
+    #network_mode: service:db
+
+  db:
+    container_name: postgresdb
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    environment:
+      # NOTE: POSTGRES_DB/USER/PASSWORD should match values in app container
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: milhas
+    ports:
+      - "5432:5432"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
