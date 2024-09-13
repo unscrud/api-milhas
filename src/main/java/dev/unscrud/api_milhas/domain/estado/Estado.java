@@ -23,7 +23,7 @@ public class Estado {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private byte id;
+    private Byte id;
 
     @NotNull 
     @NotEmpty
