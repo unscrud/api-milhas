@@ -1,7 +1,7 @@
 CREATE TABLE estado (
     id SERIAL PRIMARY KEY,
-    nome VARCHAR(20);,
-    sigla VARCHAR(2);
+    nome VARCHAR(20) NOT NULL UNIQUE,
+    sigla VARCHAR(2) NOT NULL UNIQUE;
 );
 
  INSERT INTO estado (nome,sigla) VALUES ("Alagoas", "AL");
