@@ -2,7 +2,7 @@ package dev.unscrud.api_milhas.domain.promocao;
 
 import java.math.BigDecimal;
 
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import dev.unscrud.api_milhas.domain.util.ImagemUtil;
 
 public record PromocaoResponseDTO(
     Long id,
@@ -14,13 +14,8 @@ public record PromocaoResponseDTO(
         this(
             promocao.getId(),
             promocao.getDestino(),
-            gerarUrlImagem(promocao.getImagem()),
+            ImagemUtil.gerarUrlImagem(promocao.getImagem()),
             promocao.getPreco()
         );
-    }
-
-    private static String gerarUrlImagem(String nomeImagem){
-        String urlBase = ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
-        return urlBase + "/images/" + nomeImagem;
     }
 }

@@ -1,8 +1,8 @@
 package dev.unscrud.api_milhas.domain.depoimento;
 
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import dev.unscrud.api_milhas.domain.util.ImagemUtil;
 
-public record DepoimentoResponseDTO(
+public record DepoimentoResponseDTO (
     Long id,
     String texto,
     String autor,
@@ -13,12 +13,7 @@ public record DepoimentoResponseDTO(
             depoimento.getId(),
             depoimento.getTexto(),
             depoimento.getAutor(),
-            gerarUrlImagem(depoimento.getAvatar())
+            ImagemUtil.gerarUrlImagem(depoimento.getAvatar())
         );
-    }
-
-    private static String gerarUrlImagem(String nomeImagem){
-        String urlBase = ServletUriComponentsBuilder.fromCurrentContextPath().toUriString();
-        return urlBase + "/images/" + nomeImagem;
     }
 }
