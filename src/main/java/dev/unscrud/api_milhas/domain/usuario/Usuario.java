@@ -32,7 +32,6 @@ public class Usuario {
 
     @NotNull 
     @NotEmpty
-    @Column(unique = true)
     private String senha;
 
 }
