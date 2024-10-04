@@ -42,3 +42,16 @@ services:
 
     # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
     # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_CONFIG_SERVER_MODE: 'False'  # Modo servidor desativado, assim você terá login automático
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'  # Desativa o pedido de senha
+      PGADMIN_CONFIG_USER_ID: '1'  # Configura o ID do usuário administrador automaticamente
+      PGADMIN_DEFAULT_EMAIL: postgres@pgadmin.dev
+      PGADMIN_DEFAULT_PASSWORD: postgres
+
+    ports:
+      - "5000:80"  # Mapeia a porta 80 para acessar o pgAdmin no navegador  
