@@ -25,7 +25,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-@EqualsAndHashCode
+@EqualsAndHashCode(of = "id")
 public class Usuario implements UserDetails {
 
     @Id
