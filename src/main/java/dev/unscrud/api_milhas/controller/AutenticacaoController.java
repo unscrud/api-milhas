@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.unscrud.api_milhas.domain.usuario.DadosAutenticacao;
 import dev.unscrud.api_milhas.domain.usuario.Usuario;
+import dev.unscrud.api_milhas.infra.security.DadosTokenJWT;
 import dev.unscrud.api_milhas.infra.security.TokenService;
 import jakarta.validation.Valid;
 
@@ -24,10 +25,12 @@ public class AutenticacaoController {
     private TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity<String> efetuarLogin(@RequestBody @Valid DadosAutenticacao dadosAuth) {
-        var token = new UsernamePasswordAuthenticationToken(dadosAuth.email(), dadosAuth.senha());
-        var authentication = manager.authenticate(token);
+    public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacao dadosAuth) {
+        var authenticationToken = new UsernamePasswordAuthenticationToken(dadosAuth.email(), dadosAuth.senha());
+        var authentication = manager.authenticate(authenticationToken);
 
-        return ResponseEntity.ok(tokenService.gerarToken((Usuario) authentication.getPrincipal()));
+        var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
+
+        return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
     }
 }
