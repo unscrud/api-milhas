@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.unscrud.api_milhas.domain.usuario.DadosAutenticacao;
+import dev.unscrud.api_milhas.domain.usuario.DadosCadastro;
 import dev.unscrud.api_milhas.domain.usuario.Usuario;
 import dev.unscrud.api_milhas.infra.security.DadosTokenJWT;
 import dev.unscrud.api_milhas.infra.security.TokenService;
@@ -32,5 +33,10 @@ public class AutenticacaoController {
         var tokenJWT = tokenService.gerarToken((Usuario) authentication.getPrincipal());
 
         return ResponseEntity.ok(new DadosTokenJWT(tokenJWT));
+    }
+
+    @PostMapping("/cadastro")
+    public ResponseEntity<Void> cadastrarUsuario(@RequestBody @Valid DadosCadastro dadosCadastro) {
+        return ResponseEntity.ok().build();
     }
 }
