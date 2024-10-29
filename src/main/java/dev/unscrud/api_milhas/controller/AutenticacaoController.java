@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import dev.unscrud.api_milhas.domain.usuario.DadosAutenticacao;
 import dev.unscrud.api_milhas.domain.usuario.DadosCadastro;
 import dev.unscrud.api_milhas.domain.usuario.Usuario;
+import dev.unscrud.api_milhas.domain.usuario.UsuarioServico;
 import dev.unscrud.api_milhas.infra.security.DadosTokenJWT;
 import dev.unscrud.api_milhas.infra.security.TokenService;
 import jakarta.validation.Valid;
@@ -19,11 +20,20 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/auth")
 public class AutenticacaoController {
-    @Autowired
     private AuthenticationManager manager;
+    private TokenService tokenService;
+    private UsuarioServico usuarioServico;
 
     @Autowired
-    private TokenService tokenService;
+    public AutenticacaoController(
+        AuthenticationManager manager,
+        TokenService tokenService,
+        UsuarioServico usuarioServico
+    ){
+        this.manager = manager;
+        this.tokenService = tokenService;
+        this.usuarioServico = usuarioServico;
+    }
 
     @PostMapping("/login")
     public ResponseEntity<DadosTokenJWT> efetuarLogin(@RequestBody @Valid DadosAutenticacao dadosAuth) {
@@ -37,6 +47,7 @@ public class AutenticacaoController {
 
     @PostMapping("/cadastro")
     public ResponseEntity<Void> cadastrarUsuario(@RequestBody @Valid DadosCadastro dadosCadastro) {
+        usuarioServico.criarUsuario(dadosCadastro);
         return ResponseEntity.ok().build();
     }
 }
