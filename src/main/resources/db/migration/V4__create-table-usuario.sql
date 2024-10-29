@@ -1,4 +1,4 @@
-CREATE TYPE genero_enum AS ENUM ('masculino', 'feminino', 'outro');
+CREATE TYPE genero_enum AS ENUM ('MASCULINO', 'FEMININO', 'OUTRO');
 CREATE TABLE usuario (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
@@ -12,3 +12,4 @@ CREATE TABLE usuario (
     estado_id INT NOT NULL,
     CONSTRAINT fk_estado FOREIGN KEY (estado_id) REFERENCES estado(id)
 );
+CREATE CAST (varchar AS genero_enum) WITH INOUT AS IMPLICIT;
