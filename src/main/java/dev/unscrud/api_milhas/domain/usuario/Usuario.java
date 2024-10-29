@@ -11,6 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import dev.unscrud.api_milhas.domain.estado.Estado;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -46,7 +48,6 @@ public class Usuario implements UserDetails {
     private String cpf;
 
     @NotNull
-    @NotEmpty
     private LocalDate nascimento;
 
     @NotNull
@@ -54,7 +55,7 @@ public class Usuario implements UserDetails {
     private String telefone;
 
     @NotNull
-    @NotEmpty
+    @Enumerated(EnumType.STRING)
     private Genero genero;
 
     @NotNull 
@@ -72,7 +73,6 @@ public class Usuario implements UserDetails {
     private String cidade;
 
     @NotNull
-    @NotEmpty
     @ManyToOne
     @JoinColumn(name = "estado_id")
     private Estado estado;
@@ -91,5 +91,4 @@ public class Usuario implements UserDetails {
     public String getUsername() {
         return email;
     }
-
 }
