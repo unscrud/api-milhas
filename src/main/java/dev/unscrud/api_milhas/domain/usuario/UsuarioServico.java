@@ -1,8 +1,12 @@
 package dev.unscrud.api_milhas.domain.usuario;
 
+import java.time.LocalDate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import dev.unscrud.api_milhas.domain.estado.Estado;
 
 @Service
 public class UsuarioServico {
@@ -18,13 +22,17 @@ public class UsuarioServico {
     public Usuario criarUsuario(DadosCadastro dadosCadastro){       
         var nome = dadosCadastro.nome();
         var cpf = dadosCadastro.cpf();
-        var nascimento = dadosCadastro.nascimento();
+        var nascimento = LocalDate.parse(dadosCadastro.nascimento().substring(0, 10));
         var telefone = dadosCadastro.telefone();
-        var genero = dadosCadastro.genero();
+        var genero = Genero.valueOf(dadosCadastro.genero().toUpperCase());
         var email = dadosCadastro.email();
         var senha = passwordEncoder.encode(dadosCadastro.senha());
         var cidade = dadosCadastro.cidade();
-        var estado = dadosCadastro.estado().id();
+        Estado estado = new Estado (
+            Byte.parseByte(dadosCadastro.estado().id()),
+            dadosCadastro.estado().nome(),
+            dadosCadastro.estado().sigla()
+        );
         
         Usuario usuario = new Usuario(null, nome, cpf, nascimento, telefone, genero, email, senha, cidade, estado);
         return usuarioRepository.save(usuario);
