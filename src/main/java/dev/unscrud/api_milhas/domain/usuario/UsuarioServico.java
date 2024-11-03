@@ -3,6 +3,8 @@ package dev.unscrud.api_milhas.domain.usuario;
 import java.time.LocalDate;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +38,11 @@ public class UsuarioServico {
         
         Usuario usuario = new Usuario(null, nome, cpf, nascimento, telefone, genero, email, senha, cidade, estado);
         return usuarioRepository.save(usuario);
+    }
+
+    public Usuario getUsuarioLogado(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Usuario usuario = (Usuario) authentication.getPrincipal();
+        return usuario;
     }
 }
