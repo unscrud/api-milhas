@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +16,7 @@ import dev.unscrud.api_milhas.domain.usuario.Usuario;
 import dev.unscrud.api_milhas.domain.usuario.UsuarioServico;
 import dev.unscrud.api_milhas.infra.security.DadosTokenJWT;
 import dev.unscrud.api_milhas.infra.security.TokenService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 
 @RestController
@@ -49,5 +51,13 @@ public class AutenticacaoController {
     public ResponseEntity<Void> cadastrarUsuario(@RequestBody @Valid DadosCadastro dadosCadastro) {
         usuarioServico.criarUsuario(dadosCadastro);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/perfil")
+    @SecurityRequirement(name = "bearer-key ")
+    public ResponseEntity<DadosCadastro> buscarUsuario(){
+        Usuario usuario = usuarioServico.getUsuarioLogado();
+        DadosCadastro dadosCadastro = new DadosCadastro(usuario);
+        return ResponseEntity.ok(dadosCadastro);
     }
 }
