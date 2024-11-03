@@ -11,4 +11,12 @@ public record DadosEstado(
 
     @NotBlank (message = "A sigla do estado é obrigatoria")
     String sigla
-){}
+){
+    public DadosEstado(Estado estado) {
+        this(
+            String.valueOf(estado.getId()),
+            estado.getNome(),
+            estado.getSigla()
+        );
+    }
+}

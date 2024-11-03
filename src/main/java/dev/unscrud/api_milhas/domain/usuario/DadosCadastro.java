@@ -33,4 +33,18 @@ public record DadosCadastro(
     
     @Valid
     DadosEstado estado
-){}
+){
+    public DadosCadastro(Usuario usuario) {
+        this (
+            usuario.getNome(),
+            usuario.getCpf(),
+            usuario.getNascimento().toString(),
+            usuario.getTelefone(),
+            usuario.getGenero().name().toLowerCase(),
+            usuario.getEmail(),
+            "",
+            usuario.getCidade(),
+            new DadosEstado(usuario.getEstado())
+        );
+    }
+}
