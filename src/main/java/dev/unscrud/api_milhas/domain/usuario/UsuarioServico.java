@@ -21,7 +21,7 @@ public class UsuarioServico {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public Usuario criarUsuario(DadosCadastro dadosCadastro){       
+    private Usuario converterDadosCadastroParaUsuario(DadosCadastro dadosCadastro, Long id) {
         var nome = dadosCadastro.nome();
         var cpf = dadosCadastro.cpf();
         var nascimento = LocalDate.parse(dadosCadastro.nascimento().substring(0, 10));
@@ -30,15 +30,25 @@ public class UsuarioServico {
         var email = dadosCadastro.email();
         var senha = passwordEncoder.encode(dadosCadastro.senha());
         var cidade = dadosCadastro.cidade();
-        Estado estado = new Estado (
-            Byte.parseByte(dadosCadastro.estado().id()),
-            dadosCadastro.estado().nome(),
-            dadosCadastro.estado().sigla()
+        Estado estado = new Estado(
+                Byte.parseByte(dadosCadastro.estado().id()),
+                dadosCadastro.estado().nome(),
+                dadosCadastro.estado().sigla()
         );
         
-        Usuario usuario = new Usuario(null, nome, cpf, nascimento, telefone, genero, email, senha, cidade, estado);
+        return new Usuario(id, nome, cpf, nascimento, telefone, genero, email, senha, cidade, estado);
+    }
+    
+    public Usuario criarUsuario(DadosCadastro dadosCadastro) {
+        Usuario usuario = converterDadosCadastroParaUsuario(dadosCadastro, null);
         return usuarioRepository.save(usuario);
     }
+    
+    public DadosCadastro editarUsuarioLogado(DadosCadastro dadosCadastro) {
+        Usuario usuario = getUsuarioLogado();
+        Usuario usuarioAlterado = converterDadosCadastroParaUsuario(dadosCadastro, usuario.getId());
+        return new DadosCadastro(usuarioRepository.save(usuarioAlterado));
+    }    
 
     public Usuario getUsuarioLogado(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
