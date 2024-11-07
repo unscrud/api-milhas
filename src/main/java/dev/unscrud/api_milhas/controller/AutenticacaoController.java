@@ -64,7 +64,10 @@ public class AutenticacaoController {
 
     @PatchMapping("/perfil")
     @SecurityRequirement(name = "bearer-key")
-    public ResponseEntity<Void> editarUsusario(){
-        return ResponseEntity.ok().build();
+    public ResponseEntity<DadosCadastro> editarUsusario(@RequestBody @Valid DadosCadastro dadosCadastro){
+        return ResponseEntity.ok(
+                usuarioServico
+                        .editarUsuarioLogado(dadosCadastro)
+        );
     }
 }
