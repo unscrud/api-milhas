@@ -38,6 +38,7 @@ public class SecurityConfiguration {
                 req.requestMatchers(
                     HttpMethod.GET,
                     "/depoimento",
+                    "/companhia",
                     "/estado",
                     "/promocao",
                     "/images/**",
