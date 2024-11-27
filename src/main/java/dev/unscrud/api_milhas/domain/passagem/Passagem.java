@@ -46,10 +46,10 @@ public class Passagem {
     private BigDecimal taxaEmbarque;
     
     @NotNull
-    private Short conexoes;
+    private byte conexoes;
 
     @NotNull
-    private Integer tempoVoo;
+    private short tempoVoo;
 
     @ManyToOne
     @JoinColumn(name = "origemId", referencedColumnName = "id")
