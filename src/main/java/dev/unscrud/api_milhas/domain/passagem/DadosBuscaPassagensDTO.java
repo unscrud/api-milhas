@@ -14,27 +14,29 @@ public record DadosBuscaPassagensDTO(
 
     @Schema(description = "Quantidade de passageiros adultos", defaultValue = "1")
     @Min(0)
-    short passageirosAdultos,
+    Short passageirosAdultos,
 
     @Schema(description = "Quantidade de passageiros crianças", defaultValue = "0")
     @Min(0)
-    short passageirosCriancas,
+    Short passageirosCriancas, 
 
     @Schema(description = "Quantidade de passageiros bebês", defaultValue = "0")
     @Min(0)
-    short passageirosBebes,
+    Short passageirosBebes, 
 
     @Schema(description = "Tipo da passagem", allowableValues = {"Executiva", "Econômica"})
-    String tipo,
+    String tipo, 
 
     @Schema(description = "Turno para realizar o voo", allowableValues = {"Manhã", "Tarde", "Noite"})
-    byte turno,
+    String turno, 
 
     @Schema(description = "Id do estado de onde o passageiro vai sair")
-    byte origemId,
+    @Min(1)
+    Short origemId,
 
     @Schema(description = "Id do estado onde o passageiro vai chegar")
-    byte destinoId,
+    @Min(1)
+    Short destinoId,
 
     @Schema(description = "Filtrar por companhias (ids separados por vírgula)")
     String companhiasId,
@@ -49,13 +51,14 @@ public record DadosBuscaPassagensDTO(
 
     @Schema(description = "Quantidade de conexões desejadas")
     @PositiveOrZero
-    byte conexoes,
+    Short conexoes,
 
     @Schema(description = "Tempo de voo máximo", defaultValue = "")
     @PositiveOrZero
-    short tempoVoo,
+    Short tempoVoo,
 
     @Schema(description = "Data da ida", required = true)
+    @NotNull
     String dataIda,
 
     @Schema(description = "Data da volta")
