@@ -2,22 +2,22 @@ CREATE TYPE tipo_passagem_enum AS ENUM ('ECONOMICA', 'EXECUTIVA');
 CREATE TABLE IF NOT EXISTS "passagem" (
 	"id" SERIAL PRIMARY KEY,
 	"tipo" tipo_passagem_enum NOT NULL,
-    "precoIda" DECIMAL(10, 2) NOT NULL,
-	"precoVolta" DECIMAL(10, 2) NOT NULL,
-	"taxaEmbarque" DECIMAL(10, 2) NOT NULL,
+    "preco_ida" DECIMAL(10, 2) NOT NULL,
+	"preco_volta" DECIMAL(10, 2) NOT NULL,
+	"taxa_embarque" DECIMAL(10, 2) NOT NULL,
 	"conexoes" SMALLINT NOT NULL,
-	"tempoVoo" INTEGER NOT NULL,
-	"origemId" INTEGER,
-	"destinoId" INTEGER,
-	"companhiaId" INTEGER,
-	CONSTRAINT "FK_COMPANHIA" FOREIGN KEY("companhiaId") REFERENCES "companhia"("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT "FK_ORIGEM" FOREIGN KEY("origemId") REFERENCES "estado"("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT "FK_DESTINO" FOREIGN KEY("destinoId") REFERENCES "estado"("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
-	CONSTRAINT "REL_UNIQUE_DESTINO" UNIQUE("destinoId")
+	"tempo_voo" INTEGER NOT NULL,
+	"origem_id" INTEGER,
+	"destino_id" INTEGER,
+	"companhia_id" INTEGER,
+	CONSTRAINT "FK_COMPANHIA" FOREIGN KEY("companhia_id") REFERENCES "companhia"("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT "FK_ORIGEM" FOREIGN KEY("origem_id") REFERENCES "estado"("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT "FK_DESTINO" FOREIGN KEY("destino_id") REFERENCES "estado"("id") ON DELETE NO ACTION ON UPDATE NO ACTION,
+	CONSTRAINT "REL_UNIQUE_DESTINO" UNIQUE("destino_id")
 );
 CREATE CAST (varchar AS tipo_passagem_enum) WITH INOUT AS IMPLICIT;
 
-INSERT INTO "passagem" ("tipo","precoIda","precoVolta","taxaEmbarque","conexoes","tempoVoo","origemId","destinoId","companhiaId") 
+INSERT INTO "passagem" ("tipo","preco_ida","preco_volta","taxa_embarque","conexoes","tempo_voo","origem_id","destino_id","companhia_id") 
     VALUES 
         ('ECONOMICA',250,240,80.25,1,4,9,15,3),
         ('EXECUTIVA',2800,2700,175.75,2,6,11,19,4),

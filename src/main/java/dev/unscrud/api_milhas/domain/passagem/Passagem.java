@@ -37,29 +37,33 @@ public class Passagem {
     private TipoPassagem tipoPassagem;
 
     @NotNull
+    @Column(name = "preco_ida")
     private BigDecimal precoIda;
 
     @NotNull
+    @Column(name = "preco_volta")
     private BigDecimal precoVolta;
 
     @NotNull
+    @Column(name = "taxa_embarque")
     private BigDecimal taxaEmbarque;
     
     @NotNull
     private byte conexoes;
 
     @NotNull
+    @Column(name = "tempo_voo")
     private short tempoVoo;
 
     @ManyToOne
-    @JoinColumn(name = "origemId", referencedColumnName = "id")
+    @JoinColumn(name = "origem_id", referencedColumnName = "id")
     private Estado origem;
 
     @ManyToOne
-    @JoinColumn(name = "destinoId", referencedColumnName = "id")
+    @JoinColumn(name = "destino_id", referencedColumnName = "id")
     private Estado destino;
 
     @ManyToOne
-    @JoinColumn(name = "companhiaId", referencedColumnName = "id")
+    @JoinColumn(name = "companhia_id", referencedColumnName = "id")
     private Companhia companhia;
 }
