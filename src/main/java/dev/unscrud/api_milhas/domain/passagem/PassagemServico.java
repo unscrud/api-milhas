@@ -14,7 +14,7 @@ public class PassagemServico {
     private PassagemRepository passagemRepository;
 
     public Page<Passagem> listarPorFiltro(@Valid DadosBuscaPassagensDTO dadosBusca, Pageable pageable) {
-        return passagemRepository.findAll(pageable);
+        return passagemRepository.findAll(PassagemSpecifications.comJoinsEFiltro(dadosBusca), pageable);
     }
 
 }
