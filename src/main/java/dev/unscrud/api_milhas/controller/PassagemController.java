@@ -1,8 +1,9 @@
 package dev.unscrud.api_milhas.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +22,11 @@ public class PassagemController {
     private PassagemServico passagemServico;
 
     @GetMapping("/search")
-    public List<Passagem> buscarPassagens(@ModelAttribute @Valid DadosBuscaPassagensDTO dadosBusca) {
-        return passagemServico.listarPorFiltro(dadosBusca);
+    public Page<Passagem> buscarPassagens(
+        @ModelAttribute @Valid DadosBuscaPassagensDTO dadosBusca,
+        @PageableDefault(size = 5) Pageable paginacao
+    ) {
+        Page<Passagem> passagens = passagemServico.listarPorFiltro(dadosBusca, paginacao);
+        return passagens;
     }
 }
