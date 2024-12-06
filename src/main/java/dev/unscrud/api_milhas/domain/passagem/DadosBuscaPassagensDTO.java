@@ -24,10 +24,10 @@ public record DadosBuscaPassagensDTO(
     @Min(0)
     Short passageirosBebes, 
 
-    @Schema(description = "Tipo da passagem", allowableValues = {"Executiva", "Econômica"})
+    @Schema(description = "Tipo da passagem", allowableValues = {"EXECUTIVA", "ECONOMICA"})
     String tipo, 
 
-    @Schema(description = "Turno para realizar o voo", allowableValues = {"Manhã", "Tarde", "Noite"})
+    @Schema(description = "Turno para realizar o voo", allowableValues = {"MANHA", "TARDE", "NOITE"})
     String turno, 
 
     @Schema(description = "Id do estado de onde o passageiro vai sair")
