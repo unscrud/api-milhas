@@ -18,6 +18,9 @@ public class PassagemSpecifications {
 
             List<Predicate> predicates = new ArrayList<>();
             
+            Predicate predicateIdMaiorQueZero = builder.greaterThan(root.get("id"), 0);
+            predicates.add(predicateIdMaiorQueZero);
+            
             if (dadosBusca.tipo() != null && !dadosBusca.tipo().isEmpty()) {
                 TipoPassagem tipoPassagem = TipoPassagem.valueOf(dadosBusca.tipo());
                 var enumTipoPassagem = root.get("tipoPassagem").as(String.class);
