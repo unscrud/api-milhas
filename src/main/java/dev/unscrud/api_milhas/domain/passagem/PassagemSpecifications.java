@@ -6,7 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 
 // import dev.unscrud.api_milhas.domain.companhia.Companhia;
-// import dev.unscrud.api_milhas.domain.estado.Estado;
+import dev.unscrud.api_milhas.domain.estado.Estado;
 import jakarta.persistence.criteria.*;
 
 public class PassagemSpecifications {
@@ -23,9 +23,23 @@ public class PassagemSpecifications {
             
             if (dadosBusca.tipo() != null && !dadosBusca.tipo().isEmpty()) {
                 TipoPassagem tipoPassagem = TipoPassagem.valueOf(dadosBusca.tipo());
-                var enumTipoPassagem = root.get("tipoPassagem").as(String.class);
-                Predicate predicateTipo = builder.equal(enumTipoPassagem, tipoPassagem.name());
+                Path<String> tipoPassagemPath = root.get("tipoPassagem");
+                Predicate predicateTipo = builder.equal(tipoPassagemPath.as(String.class), tipoPassagem.name());
                 predicates.add(predicateTipo);
+            }
+
+            if (dadosBusca.origemId() != null && dadosBusca.origemId() > 0) {
+                Short origemId = dadosBusca.origemId();
+                Path<Estado> origem = root.get("origem");
+                Predicate predicateOrigemId = builder.equal(origem.get("id"), origemId);
+                predicates.add(predicateOrigemId);
+            }
+
+            if (dadosBusca.destinoId() != null && dadosBusca.destinoId() > 0) {
+                Short destinoId = dadosBusca.destinoId();
+                Path<Estado> destino = root.get("destino");
+                Predicate predicateDestinoId = builder.equal(destino.get("id"), destinoId);
+                predicates.add(predicateDestinoId);
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));
