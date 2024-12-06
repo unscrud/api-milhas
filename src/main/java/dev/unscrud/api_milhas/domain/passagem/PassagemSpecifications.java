@@ -40,20 +40,29 @@ public class PassagemSpecifications {
                 predicates.add(predicateDestinoId);
             }
 
-            if (dadosBusca.precoMin() != null 
-                    && isMaiorQueZero(dadosBusca.precoMin()) ){
+            if (dadosBusca.precoMin() != null && isMaiorQueZero(dadosBusca.precoMin()) ){
                 BigDecimal precoMinimo = dadosBusca.precoMin();
                 Path<BigDecimal> precoIda = root.get("precoIda");
                 Predicate predicatePrecoMinimo = builder.greaterThanOrEqualTo(precoIda, precoMinimo);
                 predicates.add(predicatePrecoMinimo);
             }
 
-            if (dadosBusca.precoMax() != null 
-                    && isMaiorQueZero(dadosBusca.precoMax()) ){
+            if (dadosBusca.precoMax() != null && isMaiorQueZero(dadosBusca.precoMax()) ){
                 BigDecimal precoMaximo = dadosBusca.precoMax();
                 Path<BigDecimal> precoIda = root.get("precoIda");
                 Predicate predicateprecoMaximo = builder.lessThanOrEqualTo(precoIda, precoMaximo);
                 predicates.add(predicateprecoMaximo);
+            }
+
+            if (dadosBusca.conexoes() != null && dadosBusca.conexoes() > 0) {
+                Path<Short> conexoes = root.get("conexoes");
+                Predicate predicateConexoes;
+                if (dadosBusca.conexoes() > 2){
+                    predicateConexoes = builder.greaterThanOrEqualTo(conexoes, dadosBusca.conexoes());
+                } else {
+                    predicateConexoes = builder.equal(conexoes, dadosBusca.conexoes());
+                }
+                predicates.add(predicateConexoes);
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));
