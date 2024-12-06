@@ -1,5 +1,6 @@
 package dev.unscrud.api_milhas.domain.passagem;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,9 +13,6 @@ import jakarta.persistence.criteria.*;
 public class PassagemSpecifications {
     public static Specification<Passagem> comJoinsEFiltro(DadosBuscaPassagensDTO dadosBusca) {
         return (Root<Passagem> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
-            // Join<Passagem, Estado> origemJoin = root.join("origem", JoinType.LEFT);
-            // Join<Passagem, Estado> destinoJoin = root.join("destino", JoinType.LEFT);
-            // Join<Passagem, Companhia> companhiaJoin = root.join("companhia", JoinType.LEFT);
 
             List<Predicate> predicates = new ArrayList<>();
             
@@ -42,7 +40,27 @@ public class PassagemSpecifications {
                 predicates.add(predicateDestinoId);
             }
 
+            if (dadosBusca.precoMin() != null 
+                    && isMaiorQueZero(dadosBusca.precoMin()) ){
+                BigDecimal precoMinimo = dadosBusca.precoMin();
+                Path<BigDecimal> precoIda = root.get("precoIda");
+                Predicate predicatePrecoMinimo = builder.greaterThanOrEqualTo(precoIda, precoMinimo);
+                predicates.add(predicatePrecoMinimo);
+            }
+
+            if (dadosBusca.precoMax() != null 
+                    && isMaiorQueZero(dadosBusca.precoMax()) ){
+                BigDecimal precoMaximo = dadosBusca.precoMax();
+                Path<BigDecimal> precoIda = root.get("precoIda");
+                Predicate predicateprecoMaximo = builder.lessThanOrEqualTo(precoIda, precoMaximo);
+                predicates.add(predicateprecoMaximo);
+            }
+
             return builder.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    private static boolean isMaiorQueZero(BigDecimal valor) {
+        return valor.compareTo(BigDecimal.ZERO) > 0;
     }
 }
