@@ -2,13 +2,22 @@ package dev.unscrud.api_milhas.domain.passagem;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.jpa.domain.Specification;
 
-// import dev.unscrud.api_milhas.domain.companhia.Companhia;
+import dev.unscrud.api_milhas.domain.companhia.Companhia;
 import dev.unscrud.api_milhas.domain.estado.Estado;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Path;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+
 
 public class PassagemSpecifications {
     public static Specification<Passagem> comJoinsEFiltro(DadosBuscaPassagensDTO dadosBusca) {
@@ -63,6 +72,18 @@ public class PassagemSpecifications {
                     predicateConexoes = builder.equal(conexoes, dadosBusca.conexoes());
                 }
                 predicates.add(predicateConexoes);
+            }
+            
+            if (dadosBusca.companhiasId() != null && !dadosBusca.companhiasId().isEmpty()){
+                List<Integer> companhias = Arrays
+                        .stream(dadosBusca.companhiasId().split(","))
+                        .map(Integer::parseInt)
+                        .collect(Collectors.toList());
+                
+                Join<Passagem, Companhia> companhiaJoin = root.join("companhia", JoinType.INNER);
+                Predicate companhiaPredicate = companhiaJoin.get("id").in(companhias);
+                predicates.add(companhiaPredicate);
+                System.out.println("Predicate for Companhia ID: " + companhiaPredicate);
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));
