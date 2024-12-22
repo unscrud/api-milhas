@@ -24,7 +24,7 @@ public record DadosBuscaPassagensDTO(
     @Min(0)
     Short passageirosBebes, 
 
-    @Schema(description = "Tipo da passagem", allowableValues = {"EXECUTIVA", "ECONOMICA"})
+    @Schema(description = "Tipo da passagem", allowableValues = {"Executiva", "Econômica"})
     String tipo, 
 
     @Schema(description = "Turno para realizar o voo", allowableValues = {"MANHA", "TARDE", "NOITE"})
@@ -62,14 +62,16 @@ public record DadosBuscaPassagensDTO(
     String dataIda,
 
     @Schema(description = "Data da volta")
-    String dataVolta,
+    String dataVolta
 
-    @Schema(description = "Número da página desejada", defaultValue = "1")
-    @Min(1)
-    Short pagina,
+    // Será usado o parametro page da paginação do spring
+    // @Schema(description = "Número da página desejada", defaultValue = "1")
+    // @Min(1)
+    // Short pagina
 
-    @Schema(description = "Número de passagens por página desejado", required = true)
-    @NotNull
-    @Min(1)
-    Short porPagina
+    // Será usado o parametro size da paginação do spring
+    // @Schema(description = "Número de passagens por página desejado", required = true)
+    // @NotNull
+    // @Min(1)
+    // Short porPagina
 ){}
