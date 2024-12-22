@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import dev.unscrud.api_milhas.domain.passagem.DadosBuscaPassagensDTO;
-import dev.unscrud.api_milhas.domain.passagem.Passagem;
+import dev.unscrud.api_milhas.domain.passagem.DadosPassagemResponseDTO;
 import dev.unscrud.api_milhas.domain.passagem.PassagemServico;
 import jakarta.validation.Valid;
 
@@ -22,11 +22,10 @@ public class PassagemController {
     private PassagemServico passagemServico;
 
     @GetMapping("/search")
-    public Page<Passagem> buscarPassagens(
+    public Page<DadosPassagemResponseDTO> buscarPassagens(
         @ModelAttribute @Valid DadosBuscaPassagensDTO dadosBusca,
         @PageableDefault(size = 5) Pageable paginacao
     ) {
-        Page<Passagem> passagens = passagemServico.listarPorFiltro(dadosBusca, paginacao);
-        return passagens;
+        return passagemServico.listarPorFiltro(dadosBusca, paginacao);
     }
 }
