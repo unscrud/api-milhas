@@ -19,7 +19,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
-@Entity(name = "passagem")
+@Entity
 @Table(name = "passagem")
 @Getter
 @NoArgsConstructor
