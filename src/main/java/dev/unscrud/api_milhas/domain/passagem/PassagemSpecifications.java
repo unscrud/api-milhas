@@ -83,7 +83,6 @@ public class PassagemSpecifications {
                 Join<Passagem, Companhia> companhiaJoin = root.join("companhia", JoinType.INNER);
                 Predicate companhiaPredicate = companhiaJoin.get("id").in(companhias);
                 predicates.add(companhiaPredicate);
-                System.out.println("Predicate for Companhia ID: " + companhiaPredicate);
             }
 
             return builder.and(predicates.toArray(new Predicate[0]));
