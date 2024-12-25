@@ -44,7 +44,7 @@ public class PassagemServico {
               passagem.getCompanhia(),
               dadosBusca.dataIda() != null ? LocalDate.parse(dadosBusca.dataIda(), FORMATTER) : null,
               dadosBusca.dataVolta() != null ? LocalDate.parse(dadosBusca.dataVolta(), FORMATTER) : null,
-              BigDecimal.ZERO,
+              calcularTotalOrcamento(orcamento),
               orcamento
             );
 
@@ -59,6 +59,12 @@ public class PassagemServico {
 
       return dadosPaginacao;
     }
+
+  private BigDecimal calcularTotalOrcamento(List<OrcamentoResponseDTO> orcamento) {
+    return orcamento.stream()
+        .map(OrcamentoResponseDTO::total)
+        .reduce(BigDecimal.ZERO, BigDecimal::add);
+  }
             
   private List<OrcamentoResponseDTO> montarOrcamento(DadosBuscaPassagensDTO dadosBusca, Passagem passagem) {
     List<OrcamentoResponseDTO> orcamentos = new ArrayList<>();
