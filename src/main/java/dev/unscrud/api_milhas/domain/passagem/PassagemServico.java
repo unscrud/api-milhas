@@ -30,8 +30,7 @@ public class PassagemServico {
 
       List<PassagemResponseDTO> passagensDTO = passagens.getContent().stream()
           .map( passagem -> {
-
-            List<OrcamentoResponseDTO> orcamentos = new ArrayList<>(); // preencher
+            List<OrcamentoResponseDTO> orcamento = montarOrcamento(dadosBusca,passagem);
 
             PassagemResponseDTO passagemDTO = new PassagemResponseDTO(
               passagem.getTipoPassagem().getDescricao(),
@@ -46,21 +45,99 @@ public class PassagemServico {
               dadosBusca.dataIda() != null ? LocalDate.parse(dadosBusca.dataIda(), FORMATTER) : null,
               dadosBusca.dataVolta() != null ? LocalDate.parse(dadosBusca.dataVolta(), FORMATTER) : null,
               BigDecimal.ZERO,
-              orcamentos
+              orcamento
             );
-            
-            
-            return passagemDTO;
-          }).collect(Collectors.toList());
 
-      
+            return passagemDTO;
+          }).collect(Collectors.toList());            
+
       PrecoDTO preco = passagemRepository.findPrecoIdaMinMax();
-      
+
       DadosPassagemResponseDTO dados = new DadosPassagemResponseDTO(preco.minimo(), preco.maximo(), passagensDTO);
 
       Page<DadosPassagemResponseDTO> dadosPaginacao = new PageImpl<>(Collections.singletonList(dados), pageable, passagens.getTotalElements());
-      
+
       return dadosPaginacao;
     }
+            
+  private List<OrcamentoResponseDTO> montarOrcamento(DadosBuscaPassagensDTO dadosBusca, Passagem passagem) {
+    List<OrcamentoResponseDTO> orcamentos = new ArrayList<>();
+
+    Boolean somenteIda = dadosBusca.somenteIda() == null || dadosBusca.dataVolta() == null 
+        ? true 
+        : dadosBusca.somenteIda();
+
+    if (isNaoNuloMaiorQueZero(dadosBusca.passageirosAdultos())) {
+      BigDecimal ida = passagem.getPrecoIda()
+          .multiply( BigDecimal.valueOf(dadosBusca.passageirosAdultos()));
+
+      BigDecimal volta = somenteIda 
+          ? BigDecimal.ZERO 
+          : passagem.getPrecoVolta()
+              .multiply( BigDecimal.valueOf(dadosBusca.passageirosAdultos()));
+
+      BigDecimal preco = ida.add(volta);
+      BigDecimal precoComTaxa = preco.add(passagem.getTaxaEmbarque());
+
+      OrcamentoResponseDTO orcamentoAdulto = new OrcamentoResponseDTO(
+      montaDescricaoOrcamento(dadosBusca.passageirosAdultos(), "adulto", passagem.getTipoPassagem()),
+      preco,
+      passagem.getTaxaEmbarque(),
+      precoComTaxa);
+
+      orcamentos.add(orcamentoAdulto);
+    }
+
+    if (isNaoNuloMaiorQueZero(dadosBusca.passageirosCriancas())) {
+      BigDecimal ida = passagem.getPrecoIda()
+          .multiply( BigDecimal.valueOf(dadosBusca.passageirosCriancas()));
+      BigDecimal volta = somenteIda 
+          ? BigDecimal.ZERO 
+          : passagem.getPrecoVolta()
+              .multiply( BigDecimal.valueOf(dadosBusca.passageirosCriancas()));
+      BigDecimal preco = ida.add(volta);
+      BigDecimal precoComTaxa = preco.add(passagem.getTaxaEmbarque());
+
+      OrcamentoResponseDTO orcamentoCrianca = new OrcamentoResponseDTO(
+      montaDescricaoOrcamento(dadosBusca.passageirosCriancas(), "criança", passagem.getTipoPassagem()),
+      preco,
+      passagem.getTaxaEmbarque(),
+      precoComTaxa);
+
+      orcamentos.add(orcamentoCrianca);
+    }
+
+    if (isNaoNuloMaiorQueZero(dadosBusca.passageirosBebes())) {
+      BigDecimal ida = passagem.getPrecoIda()
+          .multiply( BigDecimal.valueOf(dadosBusca.passageirosBebes()));
+      BigDecimal volta = somenteIda
+          ? BigDecimal.ZERO 
+          : passagem.getPrecoVolta()
+              .multiply( BigDecimal.valueOf(dadosBusca.passageirosBebes()));
+      BigDecimal preco = ida.add(volta);
+      BigDecimal precoComTaxa = preco.add(passagem.getTaxaEmbarque());
+
+      OrcamentoResponseDTO orcamentoBebe = new OrcamentoResponseDTO(
+      montaDescricaoOrcamento(dadosBusca.passageirosBebes(), "bebê", passagem.getTipoPassagem()),
+      preco,
+      passagem.getTaxaEmbarque(),
+      precoComTaxa);
+
+      orcamentos.add(orcamentoBebe);
+    }
+    
+    return orcamentos;
+  }
+
+  private boolean isNaoNuloMaiorQueZero(Short valor) {
+    return valor != null && valor > 0;
+  }
+
+  private String montaDescricaoOrcamento(Short quantidade, String tipoDePassageiro, TipoPassagem tipoPassagem) {
+    return String.valueOf(quantidade) + " " 
+    + tipoDePassageiro 
+    + (quantidade > 1 ? "s": "") + ", "
+    + tipoPassagem.getDescricao().toLowerCase();
+  }
 
 }
