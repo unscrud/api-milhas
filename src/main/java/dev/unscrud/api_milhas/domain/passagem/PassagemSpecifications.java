@@ -20,7 +20,7 @@ import jakarta.persistence.criteria.Root;
 
 
 public class PassagemSpecifications {
-    public static Specification<Passagem> comJoinsEFiltro(DadosBuscaPassagensDTO dadosBusca) {
+    public static Specification<Passagem> comFiltro(DadosBuscaPassagensDTO dadosBusca) {
         return (Root<Passagem> root, CriteriaQuery<?> query, CriteriaBuilder builder) -> {
 
             List<Predicate> predicates = new ArrayList<>();
@@ -29,7 +29,7 @@ public class PassagemSpecifications {
             predicates.add(predicateIdMaiorQueZero);
             
             if (dadosBusca.tipo() != null && !dadosBusca.tipo().isEmpty()) {
-                TipoPassagem tipoPassagem = TipoPassagem.valueOf(dadosBusca.tipo());
+                TipoPassagem tipoPassagem = TipoPassagem.obterTipoDa(dadosBusca.tipo());
                 Path<String> tipoPassagemPath = root.get("tipoPassagem");
                 Predicate predicateTipo = builder.equal(tipoPassagemPath.as(String.class), tipoPassagem.name());
                 predicates.add(predicateTipo);
